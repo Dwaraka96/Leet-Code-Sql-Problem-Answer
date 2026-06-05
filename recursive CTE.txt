@@ -1,0 +1,51 @@
+What’s a CTE?
+A CTE, or Common Table Expression, is like a temporary result set you can refer to within a SELECT, INSERT, UPDATE, or DELETE statement.
+Think of it as a way to simplify complex subqueries by naming them and pulling them out of the chaos.
+
+Here’s what a basic (non-recursive) CTE looks like:
+WITH high_earners AS (
+SELECT name, salary
+FROM employees
+WHERE salary > 100000
+)
+
+SELECT * FROM high_earners;
+------------------------------------------------------------------------------------------------------------------------------
+Now, What Makes It Recursive?
+A recursive CTE takes things one step further: it refers to itself.
+You’ll often see recursive CTEs used to explore hierarchies, like finding every employee under a certain manager, 
+or traversing parent-child relationships in a tree structure. 
+They’re also great for generating sequences or solving problems where each row depends on the one before it.
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+A recursive CTE (Common Table Expression) is a special type of CTE in SQL that allows a query to reference itself. It is mainly used for working with hierarchical or tree-structured data such as:
+
+Organizational charts (manager → employee)
+Category trees
+Graph traversal
+Generating sequences (numbers, dates)
+
+🔹 Basic Concept
+A recursive CTE has two parts:
+
+
+1. Anchor query (base case)
+→ Starting point (runs once)
+
+
+2. Recursive query
+→ Refers to the CTE itself and keeps running until a condition stops it
+
+WITH RECURSIVE cte_name AS (
+    -- Anchor query (base case)
+    SELECT ...
+
+    UNION ALL
+
+    -- Recursive query (refers to itself)
+    SELECT ...
+    FROM cte_name
+    WHERE condition
+)
+SELECT * FROM cte_name;
