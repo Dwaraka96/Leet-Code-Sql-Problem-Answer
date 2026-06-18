@@ -1,0 +1,99 @@
+--Question--
+
+Table: MyNumbers
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| num         | int  |
++-------------+------+
+This table may contain duplicates (In other words, there is no primary key for this table in SQL).
+Each row of this table contains an integer.
+ 
+
+A single number is a number that appeared only once in the MyNumbers table.
+
+Find the largest single number. If there is no single number, report null.
+
+The result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+MyNumbers table:
++-----+
+| num |
++-----+
+| 8   |
+| 8   |
+| 3   |
+| 3   |
+| 1   |
+| 4   |
+| 5   |
+| 6   |
++-----+
+Output: 
++-----+
+| num |
++-----+
+| 6   |
++-----+
+Explanation: The single numbers are 1, 4, 5, and 6.
+Since 6 is the largest single number, we return it.
+Example 2:
+
+Input: 
+MyNumbers table:
++-----+
+| num |
++-----+
+| 8   |
+| 8   |
+| 7   |
+| 7   |
+| 3   |
+| 3   |
+| 3   |
++-----+
+Output: 
++------+
+| num  |
++------+
+| null |
++------+
+Explanation: There are no single numbers in the input table so we return null.
+
+
+
+
+--Answer--
+
+SELECT 
+    x.num 
+FROM (
+    -- Step 1: Find all numbers that appear only once
+    SELECT num 
+    FROM my_numbers 
+    GROUP BY num 
+    HAVING COUNT(*) = 1
+    
+    UNION ALL 
+    
+    -- Step 2: Add a NULL row to handle cases with no single numbers
+    SELECT NULL AS num
+) AS x 
+ORDER BY x.num DESC 
+LIMIT 1;
+
+
+Explanation of the Answer:
+Grouping and Filtering: The inner query uses GROUP BY num and HAVING COUNT(*) = 1 to isolate "single numbers"—those that appear exactly once in the dataset
+.
+Handling the NULL Requirement: A simple LIMIT 1 on the filtered list would return an empty result set (no rows) if no single numbers existed. To meet the requirement of reporting null, the solution performs a UNION ALL with a SELECT NULL statement
+.
+Final Selection: The outer query wraps the combined results, orders them by num in descending order (placing the largest number at the top), and uses LIMIT 1 to retrieve only the single largest number. If the inner query found no single numbers, the null row becomes the top (and only) result
+.
+This problem is noted as being asked in interviews at Amazon and Apple
