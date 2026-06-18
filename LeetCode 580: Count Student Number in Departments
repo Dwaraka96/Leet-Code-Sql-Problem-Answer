@@ -1,0 +1,38 @@
+Question: Count Student Number in Departments
+Write a solution to report the respective department name and the number of students majoring in each department for all departments in the Department table
+.
+Requirements:
+Include all departments, even those with no current students
+.
+Ordering: The result table must be ordered by the student number in descending order. If there is a tie, order them by department name alphabetically (ascending)
+,
+.
+Table Schema:
+student: student_id, student_name, gender, dept_id.
+department: dept_id, dept_name.
+Answer: SQL Solution
+The solution uses a LEFT JOIN and a SUM function with a CASE statement to ensure departments with zero students are counted correctly
+---------------------------------------------------------------------------------------------
+SELECT 
+    d.dept_name, 
+    SUM(CASE 
+            WHEN s.student_id IS NULL THEN 0 
+            ELSE 1 
+        END) AS student_number
+FROM department d
+LEFT JOIN student s ON d.dept_id = s.dept_id
+GROUP BY d.dept_name
+ORDER BY student_number DESC, d.dept_name ASC;
+---------------------------------------------------------------------------------------------
+Explanation of the Logic:
+LEFT JOIN: The department table is placed on the left side of the join to ensure that every department is included in the output, even if it has no matching records in the student table
+.
+Handling Zero Counts: Using COUNT(*) would incorrectly return a count of 1 for departments with no students because the joined row still exists (containing null values)
+,
+. Instead, the solution uses a SUM with a CASE statement: if the student_id is null, it adds 0; otherwise, it adds 1
+,
+.
+Grouping and Ordering: The data is grouped by the department name to aggregate the counts and then sorted according to the problem's specific descending and alphabetical requirements
+,
+.
+This question has reportedly been used in interviews at Twitter (now X)
