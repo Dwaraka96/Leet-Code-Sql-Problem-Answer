@@ -67,3 +67,19 @@ FROM (
 ) AS expanded_insurance
 WHERE count_tiv_2015 > 1  -- Condition 1: Shared TIV_2015 with at least one other
   AND count_city = 1;      -- Condition 2: Unique location (latitude and longitude)
+
+
+
+Explanation of the Answer:
+Window Functions (COUNT(*) OVER): Two window functions are used in a derived table (or subquery) to evaluate the conditions for every row simultaneously
+.
+PARTITION BY TIV_2015: This counts how many rows share the same 2015 investment value
+.
+PARTITION BY LAT, LON: This counts how many rows share the same geographic coordinates
+.
+Filtering Logic:
+count_tiv_2015 > 1: Ensures the policyholder has the same 2015 investment value as one or more other policyholders
+.
+count_city = 1: Ensures the policyholder is not located in the same city (unique latitude/longitude pair) as any other policyholder
+.
+Final Aggregation: The outer query calculates the SUM of the TIV_2016 values for the filtered rows and uses the ROUND function to format the result to two decimal places, as required by the problem
